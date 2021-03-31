@@ -1,13 +1,4 @@
-
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
-#include "../include/pinControl.h"
+#include "pinControl.h"
 
 
 int unExportPin(char *pin)
@@ -54,17 +45,17 @@ int pinMode(char *pin, bool mode)
             perror("Error writing to direction file");
             exit(1);
         }
-        else
-        {
-            if (write(fd, "in", 2) != 3)
-            {
-                perror("Error writing to direction file");
-                exit(1);
-            }
-        }
-        close(fd);
-        return 0;
     }
+    else
+    {
+        if (write(fd, "in", 2) != 3)
+        {
+            perror("Error writing to direction file");
+            exit(1);
+        }
+    }
+    close(fd);
+    return 0;
 }
 
 int digitalWrite(char *pin, char *value)
@@ -83,8 +74,6 @@ int digitalWrite(char *pin, char *value)
             exit(1);
     }
     close(fd);
-
-    //unExportPin(pin);
     return 0;
 }
 
@@ -101,8 +90,8 @@ char digitalRead(char *pin)
     }
     char *value;
     if (read(fd, value, 1) != 1) {
-            perror("Error writing to value file");
-            exit(1);
+        perror("Error reading to value file");
+        exit(1);
     }
     close(fd);
     //unExportPin(pin);
