@@ -23,26 +23,16 @@ export class HouseComponent implements OnInit {
   }
 
   // Sin backend
-  switchLights (): void {
-    if (this.isLightsSame()){
-      for (let light = 0; light < 5; light++) {
-        this.lightsOn[light] = !this.lightsOn[light]; 
-      }
-    }
-    else{
-      for (let light = 0; light < 5; light++) {
-        this.lightsOn[light] = false; 
-      }
+  turnOnLights (): void {
+    for (let light = 0; light < 5; light++) {
+      this.lightsOn[light] = true; 
     }
   }
 
-  isLightsSame (): boolean {
-    let same = this.lightsOn[0];
-    for (let light = 1; light < 4; light++) {
-      if (same != this.lightsOn[light]){
-        return false;
-      }
+  // Sin backend
+  turnOffLights (): void {
+    for (let light = 0; light < 5; light++) {
+      this.lightsOn[light] = false; 
     }
-    return true;
   }
 }

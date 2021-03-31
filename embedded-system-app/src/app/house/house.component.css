@@ -42,12 +42,21 @@
     bottom: 30%;
     right: 26%;
 }
-.btn-all-lights {
+.btn-on-lights {
     position: absolute;
     display: inline-block;
     text-align: center;
     width: 15%;
     height: 7%;
     top: 0%;
+    right: 0%;
+}
+.btn-off-lights {
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    width: 15%;
+    height: 7%;
+    top: 8%;
     right: 0%;
 }

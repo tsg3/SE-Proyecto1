@@ -15,13 +15,11 @@
         />
       </div>
     </div>
-    <button (click)="switchLights()" class="btn-all-lights">
-        <ng-container *ngIf="isLightsSame(); else notSame">
-          Apagar/Encender luces
-        </ng-container>
-        <ng-template #notSame> 
-          Apagar luces 
-        </ng-template>
+    <button (click)="turnOnLights()" class="btn-on-lights">
+      Encender luces
+    </button>
+    <button (click)="turnOffLights()" class="btn-off-lights">
+      Apagar luces
     </button>
   </div>
 </div>
