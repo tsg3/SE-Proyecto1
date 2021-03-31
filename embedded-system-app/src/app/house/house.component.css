@@ -10,7 +10,6 @@
     background: url("../../assets/diagram.png");
     background-size: contain;
     background-repeat: no-repeat;
-    background-color: #122145;
   }
 .img {
     display: block;
@@ -18,38 +17,37 @@
     max-height: 100%;
     object-fit: cover;
 }
-.light-1 {
+.light {
     position: absolute;
+    width: 8.5%;
+    height: 8.5%;
+}
+#light-0 {
     top: 27%;
     left: 12%;
-    width: 10%;
-    height: 10%;
 }
-.light-2 {
-    position: absolute;
+#light-1 {
     top: 27%;
     right: 38%;
-    width: 10%;
-    height: 10%;
 }
-.light-3 {
-    position: absolute;
+#light-2 {
     bottom: 30%;
     left: 12%;
-    width: 10%;
-    height: 10%;
 }
-.light-4 {
-    position: absolute;
+#light-3 {
     bottom: 30%;
     left: 40%;
-    width: 10%;
-    height: 10%;
 }
-.light-5 {
-    position: absolute;
+#light-4 {
     bottom: 30%;
     right: 26%;
-    width: 10%;
-    height: 10%;
+}
+.btn-all-lights {
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    width: 15%;
+    height: 7%;
+    top: 0%;
+    right: 0%;
 }
