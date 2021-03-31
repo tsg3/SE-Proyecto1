@@ -1,0 +1,55 @@
+.center {
+    background-color: #FFFFFF;
+}
+.example {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: 70.75%;
+    background: url("../../assets/diagram.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: #122145;
+  }
+.img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.light-1 {
+    position: absolute;
+    top: 27%;
+    left: 12%;
+    width: 10%;
+    height: 10%;
+}
+.light-2 {
+    position: absolute;
+    top: 27%;
+    right: 38%;
+    width: 10%;
+    height: 10%;
+}
+.light-3 {
+    position: absolute;
+    bottom: 30%;
+    left: 12%;
+    width: 10%;
+    height: 10%;
+}
+.light-4 {
+    position: absolute;
+    bottom: 30%;
+    left: 40%;
+    width: 10%;
+    height: 10%;
+}
+.light-5 {
+    position: absolute;
+    bottom: 30%;
+    right: 26%;
+    width: 10%;
+    height: 10%;
+}
