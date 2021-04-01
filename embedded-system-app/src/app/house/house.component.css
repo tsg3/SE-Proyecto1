@@ -23,16 +23,16 @@
     height: 8.5%;
 }
 #light-0 {
-    top: 27%;
+    bottom: 30%;
     left: 12%;
 }
 #light-1 {
     top: 27%;
-    right: 38%;
+    left: 12%;
 }
 #light-2 {
-    bottom: 30%;
-    left: 12%;
+    top: 27%;
+    right: 38%;
 }
 #light-3 {
     bottom: 30%;
@@ -74,16 +74,16 @@
     left: -2%;
 }
 #door-1 {
-    top: 30%;
-    right: 15%;
-}
-#door-2 {
     top: 43%;
     left: 40%;
 }
-#door-3 {
+#door-2 {
     top: 43%;
     right: 26%;
+}
+#door-3 {
+    top: 30%;
+    right: 15%;
 }
 .label-door {
     font-size: 1vw;

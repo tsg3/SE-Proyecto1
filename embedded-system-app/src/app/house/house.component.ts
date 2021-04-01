@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenStorageService } from '@app/_services/token-storage.service';
 import { HouseService } from '@app/_services/house.service';
-import { isWhileStatement } from 'typescript';
 
 @Component({
   selector: 'app-house',
@@ -11,9 +10,9 @@ import { isWhileStatement } from 'typescript';
 })
 export class HouseComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
-  public lightsOn = [false, false, false, false, false];
-  public doorsOpen = [false, false, false, false];
-  imgTaken = ''
+  public lightsOn = ["0", "0", "0", "0", "0"];
+  public doorsOpen = ["0", "0", "0", "0"];
+  imgTaken = ""
   intervalID: any;
 
   constructor(private token: TokenStorageService, 
@@ -24,7 +23,7 @@ export class HouseComponent implements OnInit, OnDestroy {
     this.isLoggedIn = !!this.token.getToken();
     let resLights = this.houseService.getLights();
     for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = resLights[i].power;
+      this.lightsOn[i] = resLights[i].State;
     }
     this.intervalID = setInterval(() => { 
         this.updateDoors(); 
@@ -40,30 +39,30 @@ export class HouseComponent implements OnInit, OnDestroy {
   updateDoors (): void {
     let resDoors = this.houseService.getDoors();
     for (let i = 0; i < 4; i++) {
-      this.doorsOpen[i] = resDoors[i].opened;
+      this.doorsOpen[i] = resDoors[i].State;
     }
   }
 
   // Sin backend
-  switchLight (light: number): void {
-    this.lightsOn[light] = !this.lightsOn[light];
-    this.houseService.switchLight(light);
+  switchLight (id: number): void {
+    this.lightsOn[id] = this.lightsOn[id] == "1" ? "0" : "1";
+    this.houseService.switchLight(id);
   }
 
   // Sin backend
   turnOnLights (): void {
     for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = true;
+      this.lightsOn[i] = "1";
     }
-    this.houseService.setLights(true);
+    this.houseService.setLights("1");
   }
 
   // Sin backend
   turnOffLights (): void {
     for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = false;
+      this.lightsOn[i] = "0";
     }
-    this.houseService.setLights(false);
+    this.houseService.setLights("0");
   }
 
   // Sin backend
@@ -74,7 +73,7 @@ export class HouseComponent implements OnInit, OnDestroy {
 
   // Sin backend
   private getPhoto(): void {
-    this.imgTaken = this.houseService.getImage();
+    this.imgTaken = this.houseService.getImage().Data;
   }
 
   resetPhoto(): void {

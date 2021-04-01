@@ -10,7 +10,7 @@
       <div class="light" id="light-{{idx}}">
         <input (click)="switchLight(idx)"
           type="image" 
-          [src]="i == true 
+          [src]="i == '1' 
                 ? '../../assets/light-on.svg' 
                 : '../../assets/light-off.svg'" 
         />
@@ -29,7 +29,7 @@
       <div class="door" id="door-{{idx}}">
         <img src="../../assets/door.svg"/>
 
-        <ng-container *ngIf="i; else closed"> 
+        <ng-container *ngIf="i == '1'; else closed"> 
           <label class="label-door"> Opened </label>
         </ng-container>
 

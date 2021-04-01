@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 
-export class Light {
-  light: number;
-  power: boolean;
-  constructor(num: number, bool: boolean){
-    this.light = num;
-    this.power = bool;
+export class ResponseElements {
+  Id: number;
+  State: string;
+  constructor(id: number, state: string){
+    this.Id = id;
+    this.State = state;
   }
 }
 
-export class Door {
-  door: number;
-  opened: boolean;
-  constructor(num: number, bool: boolean){
-    this.door = num;
-    this.opened = bool;
+export class ResponseImage {
+  Data: string;
+  constructor(data: string){
+    this.Data = data;
   }
 }
 
@@ -24,36 +22,36 @@ export class Door {
 export class HouseService {
   constructor() { }
 
-  switchLight (light: number): void {
+  switchLight (id: number): void {
     // Se envia al backend
   }
 
-  setLights (power: boolean): void {
+  setLights (state: string): void {
     // Se envia al backend
   }
 
-  getLights (): Array<Light> {
+  getLights (): Array<ResponseElements> {
     // Se recibe del backend 'res'
-    let res = [{light: 0, power: false},
-              {light: 1, power: false},
-              {light: 2, power: false},
-              {light: 3, power: false},
-              {light: 4, power: false}];
+    let res = [{Id: 0, State: "0"},
+              {Id: 1, State: "0"},
+              {Id: 2, State: "0"},
+              {Id: 3, State: "0"},
+              {Id: 4, State: "0"}];
     return res;
   }
 
-  getDoors (): Array<Door> {
+  getDoors (): Array<ResponseElements> {
     // Se recibe del backend 'res'
-    let res = [{door: 0, opened: false},
-      {door: 1, opened: false},
-      {door: 2, opened: false},
-      {door: 3, opened: false}];
+    let res = [{Id: 0, State: "0"},
+      {Id: 1, State: "0"},
+      {Id: 2, State: "0"},
+      {Id: 3, State: "0"}];
     return res;
   }
 
-  getImage (): string { 
+  getImage (): ResponseImage { 
     // Se recibe del backend 'res'
-    let res = "../../assets/light-on.svg"
+    let res = {Data: "../../assets/light-on.svg"};
     return res;
   }
 }
