@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"home_server/controllers"
+	"serverHome/controllers"
 
 	"goji.io"
 	"goji.io/pat"
@@ -9,6 +9,6 @@ import (
 
 func set_login_routes(login *goji.Mux) {
 
-	login.HandleFunc(pat.Get("/login"), controllers.Login)
+	login.HandleFunc(pat.Get("/"), controllers.Login)
 
 }

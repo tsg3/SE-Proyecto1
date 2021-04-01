@@ -1,14 +1,51 @@
 #include "pinControl.h"
 
+long takePhoto()
+{
+    int status = system("fswebcam /dev/video0 photo.jpeg");
+
+    FILE *fileptr;
+    FILE *filedet;
+    long filelen;
+    char *buff;
+
+    fileptr = fopen("photo.jpeg", "rb");
+    fseek(fileptr, 0, SEEK_END);
+    filelen = ftell(fileptr);
+    rewind(fileptr);
+    fclose(fileptr);
+
+    return filelen;
+}
+
+char *getPhoto(long filelen)
+{
+    FILE *fileptr;
+    FILE *filedet;
+    char *buff;
+
+    buff = (char *)malloc(filelen);
+
+    fileptr = fopen("photo.jpeg", "rb");
+    // Enough memory for the file
+    fread(buff, filelen, 1, fileptr);
+    fclose(fileptr);
+
+    printf("IN C: ::::: : %s\n", buff);
+
+    return buff;
+}
 
 int unExportPin(char *pin)
 {
     int fd = open("/sys/class/gpio/unexport", O_WRONLY);
-    if (fd == -1) {
+    if (fd == -1)
+    {
         perror("Unable to open /sys/class/gpio/unexport");
         exit(1);
     }
-    if (write(fd, pin, strlen(pin)) != 2) {
+    if (write(fd, pin, strlen(pin)) != 2)
+    {
         perror("Error writing to /sys/class/gpio/unexport");
         exit(1);
     }
@@ -61,7 +98,7 @@ int pinMode(char *pin, bool mode)
 int digitalWrite(char *pin, char *value)
 {
     char pathValue[28];
-    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin); 
+    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin);
     printf("%s \n", pathValue);
     int fd = open(pathValue, O_WRONLY);
     if (fd == -1)
@@ -69,9 +106,10 @@ int digitalWrite(char *pin, char *value)
         perror("Unable to open value file");
         exit(1);
     }
-    if (write(fd, value, 1) != 1) {
-            perror("Error writing to /sys/class/gpio/gpio24/value");
-            exit(1);
+    if (write(fd, value, 1) != 1)
+    {
+        perror("Error writing to /sys/class/gpio/gpio24/value");
+        exit(1);
     }
     close(fd);
     return 0;
@@ -80,7 +118,7 @@ int digitalWrite(char *pin, char *value)
 char digitalRead(char *pin)
 {
     char pathValue[28];
-    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin); 
+    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin);
     printf("%s \n", pathValue);
     int fd = open(pathValue, O_RDONLY);
     if (fd == -1)
@@ -89,7 +127,8 @@ char digitalRead(char *pin)
         exit(1);
     }
     char *value;
-    if (read(fd, value, 1) != 1) {
+    if (read(fd, value, 1) != 1)
+    {
         perror("Error reading to value file");
         exit(1);
     }
@@ -102,7 +141,7 @@ int blinkFun(char *pin, int freq, int duration)
 {
     pinMode(pin, true);
     char pathValue[28];
-    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin); 
+    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin);
     printf("%s \n", pathValue);
     int fd = open(pathValue, O_WRONLY);
     if (fd == -1)
@@ -110,21 +149,21 @@ int blinkFun(char *pin, int freq, int duration)
         perror("Unable to open value file");
         exit(1);
     }
-    for (size_t i = 0; i < duration/freq; i++)
+    for (size_t i = 0; i < duration / freq; i++)
     {
-        if (write(fd, "1", 1) != 1) {
+        if (write(fd, "1", 1) != 1)
+        {
             perror("Error writing to /sys/class/gpio/gpio24/value");
             exit(1);
         }
-        sleep(1/(2*freq));
-        if (write(fd, "0", 1) != 1) {
+        sleep(1 / (2 * freq));
+        if (write(fd, "0", 1) != 1)
+        {
             perror("Error writing to /sys/class/gpio/gpio24/value");
             exit(1);
         }
-        sleep(1/(2*freq));
+        sleep(1 / (2 * freq));
     }
     close(fd);
     return 0;
 }
-
-

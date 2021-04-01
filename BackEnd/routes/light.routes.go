@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"home_server/controllers"
+	"serverHome/controllers"
 
 	"goji.io"
 	"goji.io/pat"

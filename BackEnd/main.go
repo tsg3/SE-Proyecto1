@@ -2,19 +2,52 @@ package main
 
 import (
 	"fmt"
-	"home_server/routes"
+	"net"
 	"net/http"
+	"serverHome/routes"
+	signals "serverHome/src"
+	"strings"
 )
 
 const PORT = "5000"
-const IP = "127.0.0.1"
+
+func get_ip() (string, error) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return "", err
+	}
+
+	for _, addr := range addrs {
+		s := strings.Split(addr.String(), "/")
+		if s[1] == "24" {
+			return s[0], nil
+		}
+	}
+
+	return "", nil
+}
 
 func main() {
+	// Get the IP
+	IP, err := get_ip()
+
+	if IP == "" || err != nil {
+		panic(err)
+	}
+
 	// Initialize the routes and the server
 	mux := routes.Server_init()
+	signals.SignalsInit()
+	signals.SignalsOff()
 
-	fmt.Println("Starting server")
+	fmt.Println("Starting server on: " + IP + ":" + PORT)
+
 	// Starting the server in the IP and PORT assigned before
-	http.ListenAndServe(IP+":"+PORT, mux)
-	fmt.Println("Starting server")
+	err_s := http.ListenAndServe(IP+":"+PORT, mux)
+
+	if err_s != nil {
+		fmt.Println("There ir a error %v", err_s)
+		panic(err_s)
+
+	}
 }
