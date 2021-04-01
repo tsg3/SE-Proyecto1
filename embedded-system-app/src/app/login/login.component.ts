@@ -24,37 +24,21 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // Backend
-  // 
-  // onSubmit(): void {
-  //   this.authService.login(this.form).subscribe(
-  //     data => {
-  //       this.tokenStorage.saveToken(data.accessToken);
-
-  //       this.isLoginFailed = false;
-  //       this.isLoggedIn = true;
-  //       this.reloadPage();
-  //     },
-  //     err => {
-  //       this.errorMessage = err.error.message;
-  //       this.isLoginFailed = true;
-  //       this.isLoggedIn = false;
-  //     }
-  //   );
-  // }
   onSubmit(): void {
-    let authentication = this.authService.login(this.form);
-    if (authentication.Logged){
-      this.tokenStorage.saveToken(authentication.Token);
-      this.isLoginFailed = false;
-      this.isLoggedIn = true;
-      this.reloadPage();
-    }
-    else{
-      this.errorMessage = authentication.Token;
-      this.isLoginFailed = true;
-      this.isLoggedIn = false;
-    }
+    this.authService.login(this.form).subscribe(
+      data => {
+        this.tokenStorage.saveToken(data.Token);
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.reloadPage();
+      },
+      err => {
+        console.log(err);
+        this.errorMessage = err.error;
+        this.isLoginFailed = true;
+        this.isLoggedIn = false;
+      }
+    );
   }
 
   reloadPage(): void {
