@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({
@@ -8,10 +9,16 @@ import { TokenStorageService } from '@app/_services/token-storage.service';
 })
 export class HouseComponent implements OnInit {
   isLoggedIn = false;
+  imgTaken = ''
+
   // Sin backend
   public lightsOn = [false, false, false, false, false];
 
-  constructor(private token: TokenStorageService) { }
+  // Sin backend
+  public doorsOpen = [false, false, false, false];
+
+  constructor(private token: TokenStorageService, 
+    private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.token.getToken();
@@ -34,5 +41,20 @@ export class HouseComponent implements OnInit {
     for (let light = 0; light < 5; light++) {
       this.lightsOn[light] = false; 
     }
+  }
+
+  // Sin backend
+  takePhoto (content: any): void {
+    this.getPhoto();
+    this.modalService.open(content, {windowClass: 'dark-modal', size: "lg"});
+  }
+
+  // Sin backend
+  private getPhoto(): void {
+    this.imgTaken = "../../assets/light-on.svg";
+  }
+
+  resetPhoto(): void {
+    this.imgTaken = '';
   }
 }

@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { HouseComponent } from './house/house.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { HouseComponent } from './house/house.component';
       BrowserModule,
       AppRoutingModule,
       FormsModule,
-      HttpClientModule
+      HttpClientModule,
+      NgbModule
     ],
     providers: [authInterceptorProviders],
     bootstrap: [AppComponent]

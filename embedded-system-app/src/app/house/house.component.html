@@ -4,7 +4,8 @@
       <strong> Welcome cusadmin! </strong>
     </h3>
   </header>
-  <div class="example">
+
+  <div class="house">
     <div *ngFor="let i of lightsOn; let idx = index">
       <div class="light" id="light-{{idx}}">
         <input (click)="switchLight(idx)"
@@ -15,12 +16,50 @@
         />
       </div>
     </div>
+
     <button (click)="turnOnLights()" class="btn-on-lights">
-      Encender luces
+      <label class="label-btn-lights"> Turn on lights </label> 
     </button>
+
     <button (click)="turnOffLights()" class="btn-off-lights">
-      Apagar luces
+      <label class="label-btn-lights"> Turn off lights </label> 
     </button>
+
+    <div *ngFor="let i of doorsOpen; let idx = index">
+      <div class="door" id="door-{{idx}}">
+        <img src="../../assets/door.svg"/>
+
+        <ng-container *ngIf="i; else closed"> 
+          <label class="label-door"> Openned </label>
+        </ng-container>
+
+        <ng-template #closed> 
+          <label class="label-door"> Closed </label> 
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="camera">
+      <img src="../../assets/camera.svg" width="50%" height="50%"/>
+    </div>
+
+    <button (click)="takePhoto(content)" class="btn-photo">
+      <label class="label-btn-photo"> Take photo </label>
+    </button>
+
+    <ng-template #content let-modal>
+      <div class="modal-container">
+        <div class="modal-frame">
+            <img class="modal-img" src="{{imgTaken}}">
+            <button (click)="modal.close(); resetPhoto()" class="modal-btn-ok">
+                <label class="modal-lbl-ok">
+                    Ok
+                </label>
+            </button>
+        </div>
+    </div>
+    </ng-template>
+
   </div>
 </div>
   
