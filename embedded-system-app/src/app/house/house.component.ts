@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenStorageService } from '@app/_services/token-storage.service';
+import { HouseService } from '@app/_services/house.service';
 
 @Component({
   selector: 'app-house',
@@ -9,38 +10,46 @@ import { TokenStorageService } from '@app/_services/token-storage.service';
 })
 export class HouseComponent implements OnInit {
   isLoggedIn = false;
+  public lightsOn = [false, false, false, false, false];
+  public doorsOpen = [false, false, false, false];
   imgTaken = ''
 
-  // Sin backend
-  public lightsOn = [false, false, false, false, false];
-
-  // Sin backend
-  public doorsOpen = [false, false, false, false];
-
   constructor(private token: TokenStorageService, 
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private houseService: HouseService) { }
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.token.getToken();
+    let resLights = this.houseService.getLights();
+    for (let i = 0; i < 5; i++) {
+      this.lightsOn[i] = resLights[i].power;
+    }
+    let resDoors = this.houseService.getDoors();
+    for (let i = 0; i < 4; i++) {
+      this.doorsOpen[i] = resDoors[i].openned;
+    }
   }
 
   // Sin backend
   switchLight (light: number): void {
     this.lightsOn[light] = !this.lightsOn[light];
+    this.houseService.switchLight(light);
   }
 
   // Sin backend
   turnOnLights (): void {
-    for (let light = 0; light < 5; light++) {
-      this.lightsOn[light] = true; 
+    for (let i = 0; i < 5; i++) {
+      this.lightsOn[i] = true;
     }
+    this.houseService.setLights(true);
   }
 
   // Sin backend
   turnOffLights (): void {
-    for (let light = 0; light < 5; light++) {
-      this.lightsOn[light] = false; 
+    for (let i = 0; i < 5; i++) {
+      this.lightsOn[i] = false;
     }
+    this.houseService.setLights(false);
   }
 
   // Sin backend
@@ -51,7 +60,7 @@ export class HouseComponent implements OnInit {
 
   // Sin backend
   private getPhoto(): void {
-    this.imgTaken = "../../assets/light-on.svg";
+    this.imgTaken = this.houseService.getImage();
   }
 
   resetPhoto(): void {
