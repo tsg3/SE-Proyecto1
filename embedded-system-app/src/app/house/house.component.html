@@ -50,7 +50,11 @@
     <ng-template #content let-modal>
       <div class="modal-container">
         <div class="modal-frame">
-            <img class="modal-img" src="{{imgTaken}}">
+            <!-- <img class="modal-img" src="{{imgTaken}}"> -->
+            <img 
+              class="modal-img" 
+              [src]="'data:image/jpg;base64,'+imgBase64"
+            />
             <button (click)="modal.close(); resetPhoto()" class="modal-btn-ok">
                 <label class="modal-lbl-ok">
                     Ok

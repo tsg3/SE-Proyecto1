@@ -12,7 +12,7 @@ export class HouseComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   public lightsOn = ["0", "0", "0", "0", "0"];
   public doorsOpen = ["0", "0", "0", "0"];
-  imgTaken = ""
+  imgBase64 = ""
   intervalID: any;
 
   constructor(private token: TokenStorageService, 
@@ -65,18 +65,22 @@ export class HouseComponent implements OnInit, OnDestroy {
     this.houseService.setLights("0");
   }
 
-  // Sin backend
   takePhoto (content: any): void {
-    this.getPhoto();
-    this.modalService.open(content, {windowClass: 'dark-modal', size: "lg"});
+    this.getPhoto(content);
   }
 
-  // Sin backend
-  private getPhoto(): void {
-    this.imgTaken = this.houseService.getImage().Data;
+  private getPhoto(content: any): void {
+    this.houseService.getImage().subscribe(
+      data => {
+        this.imgBase64 = data.Data;
+        this.modalService.open(content, {windowClass: 'dark-modal', size: "md"});
+      }, err => {
+        console.log(err.error);
+      }
+    );
   }
 
   resetPhoto(): void {
-    this.imgTaken = '';
+    this.imgBase64 = '';
   }
 }

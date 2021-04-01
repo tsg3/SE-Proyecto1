@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const AUTH_API = 'http://localhost:4200/api/camera/take';
 
 export class ResponseElements {
   Id: number;
@@ -20,7 +24,7 @@ export class ResponseImage {
   providedIn: 'root'
 })
 export class HouseService {
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   switchLight (id: number): void {
     // Se envia al backend
@@ -49,9 +53,9 @@ export class HouseService {
     return res;
   }
 
-  getImage (): ResponseImage { 
+  getImage (): Observable<any> { 
     // Se recibe del backend 'res'
-    let res = {Data: "../../assets/light-on.svg"};
-    return res;
+    // let res = {Data: "../../assets/light-on.svg"};
+    return this.http.get(AUTH_API);
   }
 }
