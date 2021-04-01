@@ -27,37 +27,37 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="Username">Username</label>
           <input
             type="text"
             class="form-control"
-            name="username"
-            [(ngModel)]="form.username"
+            name="Username"
+            [(ngModel)]="form.Username"
             required
-            #username="ngModel"
+            #Username="ngModel"
           />
           <div
             class="alert alert-danger"
             role="alert"
-            *ngIf="f.submitted && username.invalid"
+            *ngIf="f.submitted && Username.invalid"
           >
             Username is required!
           </div>
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="Password">Password</label>
           <input
-            type="password"
+            type="Password"
             class="form-control"
-            name="password"
-            [(ngModel)]="form.password"
+            name="Password"
+            [(ngModel)]="form.Password"
             required
-            #password="ngModel"
+            #Password="ngModel"
           />
           <div
             class="alert alert-danger"
             role="alert"
-            *ngIf="f.submitted && password.invalid"
+            *ngIf="f.submitted && Password.invalid"
           >
             Password is required!
           </div>

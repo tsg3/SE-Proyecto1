@@ -10,12 +10,21 @@ import { Observable } from 'rxjs';
 //   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 // };
 
-export class auth_res {
-  response: boolean;
-  token: string;
-  constructor(bool: boolean, tok: string){
-    this.response = bool;
-    this.token = tok;
+export class Credential {
+  Username: string;
+  Password: string;
+  constructor(username: string, password: string){
+    this.Username = username;
+    this.Password = password;
+  }
+}
+
+export class authResponse {
+  Logged: boolean;
+  Token: string;
+  constructor(logged: boolean, token: string){
+    this.Logged = logged;
+    this.Token = token;
   }
 }
 
@@ -34,13 +43,13 @@ export class AuthService {
   //     password: credentials.password
   //   }, httpOptions);
   // }
-  login(credentials: any): auth_res {
-    if (credentials.username == 'cusadmin' 
-        && credentials.password == 'password'){
-      return new auth_res(true, window.btoa('cusadmin:password'));
+  login(credentials: Credential): authResponse {
+    if (credentials.Username == 'cusadmin' 
+        && credentials.Password == 'password'){
+      return new authResponse(true, window.btoa('cusadmin:password'));
     }
     else{
-      return new auth_res(false, "Incorrect username or password!");
+      return new authResponse(false, "Incorrect username or password!");
     }
   }
 }

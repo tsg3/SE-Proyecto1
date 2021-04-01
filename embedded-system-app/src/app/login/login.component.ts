@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@app/_services/auth.service';
+import { AuthService, Credential } from '@app/_services/auth.service';
 import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({
@@ -9,12 +9,14 @@ import { TokenStorageService } from '@app/_services/token-storage.service';
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {};
+  form: Credential;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) {
+    this.form = new Credential("", "");
+  }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
@@ -42,14 +44,14 @@ export class LoginComponent implements OnInit {
   // }
   onSubmit(): void {
     let authentication = this.authService.login(this.form);
-    if (authentication.response){
-      this.tokenStorage.saveToken(authentication.token);
+    if (authentication.Logged){
+      this.tokenStorage.saveToken(authentication.Token);
       this.isLoginFailed = false;
       this.isLoggedIn = true;
       this.reloadPage();
     }
     else{
-      this.errorMessage = authentication.token;
+      this.errorMessage = authentication.Token;
       this.isLoginFailed = true;
       this.isLoggedIn = false;
     }
