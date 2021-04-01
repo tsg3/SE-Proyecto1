@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenStorageService } from '@app/_services/token-storage.service';
 import { HouseService } from '@app/_services/house.service';
+import { isWhileStatement } from 'typescript';
 
 @Component({
   selector: 'app-house',
   templateUrl: './house.component.html',
   styleUrls: ['./house.component.css']
 })
-export class HouseComponent implements OnInit {
+export class HouseComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   public lightsOn = [false, false, false, false, false];
   public doorsOpen = [false, false, false, false];
   imgTaken = ''
+  intervalID: any;
 
   constructor(private token: TokenStorageService, 
     private modalService: NgbModal,
@@ -24,9 +26,21 @@ export class HouseComponent implements OnInit {
     for (let i = 0; i < 5; i++) {
       this.lightsOn[i] = resLights[i].power;
     }
+    this.intervalID = setInterval(() => { 
+        this.updateDoors(); 
+      }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalID) {
+      clearInterval(this.intervalID);
+    }
+  }
+
+  updateDoors (): void {
     let resDoors = this.houseService.getDoors();
     for (let i = 0; i < 4; i++) {
-      this.doorsOpen[i] = resDoors[i].openned;
+      this.doorsOpen[i] = resDoors[i].opened;
     }
   }
 

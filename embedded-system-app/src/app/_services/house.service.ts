@@ -11,10 +11,10 @@ export class Light {
 
 export class Door {
   door: number;
-  openned: boolean;
+  opened: boolean;
   constructor(num: number, bool: boolean){
     this.door = num;
-    this.openned = bool;
+    this.opened = bool;
   }
 }
 
@@ -44,10 +44,10 @@ export class HouseService {
 
   getDoors (): Array<Door> {
     // Se recibe del backend 'res'
-    let res = [{door: 0, openned: false},
-      {door: 1, openned: false},
-      {door: 2, openned: false},
-      {door: 3, openned: false}];
+    let res = [{door: 0, opened: false},
+      {door: 1, opened: false},
+      {door: 2, opened: false},
+      {door: 3, opened: false}];
     return res;
   }
 
