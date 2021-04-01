@@ -1,29 +1,32 @@
 package signals
 
-import "serverHome/resources"
+import (
+	"serverHome/resources"
+)
 
-func SignalsInit() {
-	signalsInit()
+func SignalsInit() error {
+	return signalsInit()
 }
 
-func SignalsOff() {
-	signalsOff()
+func SignalsOff() error {
+	return signalsOff()
 }
 
-func TurnOnPin(pin string) {
-	turnOnPin(pin)
+func TurnOnPin(pin int) error {
+	return turnOnPin(pin)
 }
 
-func TurnOffPin(pin string) {
-	turnOffPin(pin)
+func TurnOffPin(pin int) error {
+	return turnOffPin(pin)
 }
 
-func TurnOnAllLights() {
-	turnOffAllLights()
+func TurnOnAllLights() ([]resources.StateResource, error) {
+	return turnOffAllLights()
+
 }
 
-func TurnOffAllLights() {
-	turnOffAllLights()
+func TurnOffAllLights() ([]resources.StateResource, error) {
+	return turnOffAllLights()
 }
 
 func TakePhoto() string {
@@ -34,6 +37,6 @@ func TakePhoto() string {
 
 }
 
-func ReadAllDoors() []resources.DoorResource {
+func ReadAllDoors() []resources.StateResource {
 	return readAllDoors()
 }

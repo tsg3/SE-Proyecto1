@@ -12,13 +12,14 @@ import "C"
 // import "unsafe"
 
 import (
+	"errors"
 	"fmt"
 	"serverHome/resources"
 	"unsafe"
 )
 
 var DOORS = [4]string{"5", "6", "16", "26"}
-var LIGHTS = [5]string{"17", "18", "27", "22", "23"}
+var LIGHTS = [5]string{"17", "18", "22", "23", "27"}
 
 func setPin(pin string, mode bool) {
 
@@ -35,7 +36,7 @@ func unSetPin(pin string) {
 	C.free(unsafe.Pointer(pinNum))
 }
 
-func signalsInit() {
+func signalsInit() error {
 
 	// Lights set as Write
 	for _, light := range LIGHTS {
@@ -46,54 +47,86 @@ func signalsInit() {
 	for _, door := range DOORS {
 		setPin(door, false)
 	}
+
+	return nil
 }
 
-func signalsOff() {
+func signalsOff() error {
 	// Lights set as Write
-	unSetPin("17")
-	unSetPin("18")
-	unSetPin("27")
-	unSetPin("22")
-	unSetPin("23")
+	for _, light := range LIGHTS {
+		unSetPin(light)
+	}
 
 	//  Doors set as Only Read
-	unSetPin("5")
-	unSetPin("6")
-	unSetPin("16")
-	unSetPin("26")
+	for _, door := range DOORS {
+		unSetPin(door)
+	}
+
+	return nil
+
 }
 
-func turnOnPin(pin string) {
-	fmt.Println("Prendiendo" + pin)
-	pinNum := C.CString(pin)
+func checkLight(pin int) error {
+	if pin >= len(LIGHTS) {
+		return errors.New("ID OUT of RANGE")
+	}
+	return nil
+}
+
+func turnOnPin(pin int) error {
+	err := checkLight(pin)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Prendiendo" + LIGHTS[pin])
+	pinNum := C.CString(LIGHTS[pin])
 	oneV := C.CString("1")
 	C.digitalWrite(pinNum, oneV)
 	C.free(unsafe.Pointer(oneV))
 	C.free(unsafe.Pointer(pinNum))
+
+	return nil
 }
 
-func turnOffPin(pin string) {
-	fmt.Println("Apangando" + pin)
-	pinNum := C.CString(pin)
+func turnOffPin(pin int) error {
+	err := checkLight(pin)
+
+	if err != nil {
+		return err
+	}
+	fmt.Println("Apangando" + LIGHTS[pin])
+	pinNum := C.CString(LIGHTS[pin])
 	ceroV := C.CString("0")
 	C.digitalWrite(pinNum, ceroV)
 	C.free(unsafe.Pointer(ceroV))
 	C.free(unsafe.Pointer(pinNum))
+
+	return nil
 }
 
-func turnOnAllLights() {
+func turnOnAllLights() ([]resources.StateResource, error) {
 	// Lights set as Write
-	for _, light := range LIGHTS {
-		turnOnPin(light)
+	for i, _ := range LIGHTS {
+		err := turnOnPin(i)
+		if err != nil {
+			return nil, err
+		}
 	}
+
+	return readAllLights(), nil
 
 }
 
-func turnOffAllLights() {
-	for _, light := range LIGHTS {
-		turnOffPin(light)
+func turnOffAllLights() ([]resources.StateResource, error) {
+	for i, _ := range LIGHTS {
+
+		err := turnOffPin(i)
+		if err != nil {
+			return nil, err
+		}
 	}
 
+	return readAllLights(), nil
 }
 
 func takePhoto() string {
@@ -117,18 +150,35 @@ func readPin(pin string) string {
 
 }
 
-func readAllDoors() []resources.DoorResource {
+func readAllDoors() []resources.StateResource {
 
-	doorsObjs := []resources.DoorResource{}
+	doorsObjs := []resources.StateResource{}
 
 	for i, door := range DOORS {
 		state := readPin(door)
-		doorObj := resources.DoorResource{
+		doorObj := resources.StateResource{
 			Id:    i,
 			State: state,
 		}
 
 		doorsObjs = append(doorsObjs, doorObj)
+	}
+
+	return doorsObjs
+}
+
+func readAllLights() []resources.StateResource {
+
+	doorsObjs := []resources.StateResource{}
+
+	for i, light := range LIGHTS {
+		state := readPin(light)
+		lightObj := resources.StateResource{
+			Id:    i,
+			State: state,
+		}
+
+		doorsObjs = append(doorsObjs, lightObj)
 	}
 
 	return doorsObjs
