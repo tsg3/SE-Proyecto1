@@ -11,6 +11,9 @@ import (
 )
 
 func TurnOnLight(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
+
 	id, err := strconv.Atoi(pat.Param(r, "id"))
 
 	if err != nil {
@@ -30,6 +33,9 @@ func TurnOnLight(w http.ResponseWriter, r *http.Request) {
 }
 
 func TurnOffLight(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
+
 	id, err := strconv.Atoi(pat.Param(r, "id"))
 
 	if err != nil {
@@ -49,6 +55,9 @@ func TurnOffLight(w http.ResponseWriter, r *http.Request) {
 }
 
 func TurnOnAllLights(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
+
 	ligths, err := signals.TurnOnAllLights()
 	if err != nil {
 		fmt.Fprintf(w, "Error while turning lights: %s!", err)
@@ -65,6 +74,8 @@ func TurnOnAllLights(w http.ResponseWriter, r *http.Request) {
 }
 
 func TurnOffAllLights(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
 	ligths, err := signals.TurnOnAllLights()
 	if err != nil {
 		fmt.Fprintf(w, "Error while turning lights: %s!", err)

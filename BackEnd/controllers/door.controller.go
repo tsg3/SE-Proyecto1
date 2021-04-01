@@ -7,6 +7,7 @@ import (
 )
 
 func GetDoorsState(w http.ResponseWriter, r *http.Request) {
+	setCORS(&w, r)
 	states := signals.ReadAllDoors()
 
 	json, err := json.Marshal(states)

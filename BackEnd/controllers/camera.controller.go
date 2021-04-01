@@ -8,6 +8,10 @@ import (
 )
 
 func TakePhoto(w http.ResponseWriter, r *http.Request) {
+	setCORS(&w, r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 	data := signals.TakePhoto()
 
 	res := resources.CameraResource{

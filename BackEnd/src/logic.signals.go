@@ -12,8 +12,11 @@ import "C"
 // import "unsafe"
 
 import (
+	"bufio"
+	"encoding/base64"
 	"errors"
 	"fmt"
+	"os"
 	"serverHome/resources"
 	"unsafe"
 )
@@ -130,13 +133,40 @@ func turnOffAllLights() ([]resources.StateResource, error) {
 }
 
 func takePhoto() string {
-	var ptr *C.char
-	ar := C.takePhoto()
-	ptr = C.getPhoto(ar)
+	// var ptr *C.char
+	C.takePhoto()
+	// ptr = C.getPhoto(ar)
 
-	data := C.GoString(ptr)
+	imgFile, err := os.Open("photo.jpeg") // a QR code image
 
-	return data
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	defer imgFile.Close()
+
+	// create a new buffer base on file size
+	fInfo, _ := imgFile.Stat()
+	var size int64 = fInfo.Size()
+	buf := make([]byte, size)
+
+	// read file content into buffer
+	fReader := bufio.NewReader(imgFile)
+	fReader.Read(buf)
+
+	// if you create a new image instead of loading from file, encode the image to buffer instead with png.Encode()
+
+	// png.Encode(&buf, image)
+
+	// convert the buffer bytes to base64 string - use buf.Bytes() for new image
+	encodedStr := base64.StdEncoding.EncodeToString(buf)
+
+	// data := C.GoString(ptr)
+
+	// encodedStr := base64.StdEncoding.EncodeToString([]byte(data))
+
+	return encodedStr
 
 }
 
@@ -146,7 +176,9 @@ func readPin(pin string) string {
 	state := C.digitalRead(pinNum)
 	C.free(unsafe.Pointer(pinNum))
 
-	return state
+	result := C.GoString(state)
+
+	return result
 
 }
 

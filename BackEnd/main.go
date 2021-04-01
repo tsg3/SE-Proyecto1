@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"serverHome/controllers"
 	"serverHome/routes"
-	signals "serverHome/src"
 	"strings"
 )
 
@@ -35,10 +35,12 @@ func main() {
 		panic(err)
 	}
 
+	// Init AdminUser
+	controllers.InitAdminUser()
 	// Initialize the routes and the server
 	mux := routes.Server_init()
-	signals.SignalsInit()
-	signals.SignalsOff()
+	// signals.SignalsInit()
+	// signals.SignalsOff()
 
 	fmt.Println("Starting server on: " + IP + ":" + PORT)
 

@@ -9,6 +9,6 @@ import (
 
 func set_login_routes(login *goji.Mux) {
 
-	login.HandleFunc(pat.Get("/"), controllers.Login)
+	login.HandleFunc(pat.Post("/"), controllers.Login)
 
 }

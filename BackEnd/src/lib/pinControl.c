@@ -115,7 +115,7 @@ int digitalWrite(char *pin, char *value)
     return 0;
 }
 
-char digitalRead(char *pin)
+char *digitalRead(char *pin)
 {
     char pathValue[28];
     sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin);
@@ -134,7 +134,7 @@ char digitalRead(char *pin)
     }
     close(fd);
     //unExportPin(pin);
-    return *value;
+    return value;
 }
 
 int blinkFun(char *pin, int freq, int duration)
@@ -165,5 +165,16 @@ int blinkFun(char *pin, int freq, int duration)
         sleep(1 / (2 * freq));
     }
     close(fd);
+    return 0;
+}
+
+
+int writePhoto(char *photo, int a){
+    FILE *filedet;
+    filedet = fopen("photo-test.jpeg", "w");
+    fwrite(photo, 1, a, filedet);
+
+    fclose(filedet);
+
     return 0;
 }

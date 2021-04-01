@@ -1,9 +1,17 @@
 package routes
 
 import (
+	"net/http"
+
 	"goji.io"
 	"goji.io/pat"
 )
+
+func enableCORS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET")
+	w.Header().Set("Access-Control-Allow-Headers", "authorization")
+}
 
 // Init the routes of the API
 func Server_init() *goji.Mux {

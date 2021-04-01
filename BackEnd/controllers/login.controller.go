@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -72,10 +73,15 @@ func generateToken(userId int) (string, error) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
+
 	body, err := ioutil.ReadAll(r.Body)
 
+	fmt.Printf("%s\n", body)
+
 	if err != nil {
-		http.Error(w, "There is an error: "+err.Error(), http.StatusBadGateway)
+		http.Error(w, "There is an error with body: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -84,19 +90,23 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &user)
 
 	if err != nil {
-		http.Error(w, "There is an error: "+err.Error(), http.StatusBadGateway)
+		http.Error(w, "There is an error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	fmt.Printf("Username : => %s\nPassword: => %s", user.UserName, user.Password)
 
 	isUser, err := checkUser(user.UserName, user.Password)
 
 	if err != nil {
-		http.Error(w, "There is an error: "+err.Error(), http.StatusBadRequest)
+		http.Error(w, "There is an error: "+err.Error(), http.StatusNotFound)
+		return
 	}
 	tokenSecret, err := generateToken(ADMINUSER.Id)
 
 	if err != nil {
 		println("Token couldn't be generated")
+		return
 	}
 
 	loginRes := resources.LoginResource{
