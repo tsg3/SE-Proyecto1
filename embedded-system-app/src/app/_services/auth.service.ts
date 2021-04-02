@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const AUTH_API = 'http://localhost:4200/api/login/';
+const AUTH_API = 'http://192.168.0.16:4200/api/login/';
 
 export class Credential {
   Username: string;

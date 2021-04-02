@@ -21,6 +21,7 @@ export class HouseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.token.getToken();
+    // Sin backend
     let resLights = this.houseService.getLights();
     for (let i = 0; i < 5; i++) {
       this.lightsOn[i] = resLights[i].State;
@@ -36,6 +37,7 @@ export class HouseComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Sin backend
   updateDoors (): void {
     let resDoors = this.houseService.getDoors();
     for (let i = 0; i < 4; i++) {
@@ -45,24 +47,44 @@ export class HouseComponent implements OnInit, OnDestroy {
 
   // Sin backend
   switchLight (id: number): void {
-    this.lightsOn[id] = this.lightsOn[id] == "1" ? "0" : "1";
-    this.houseService.switchLight(id);
+    // this.lightsOn[id] = this.lightsOn[id] == "1" ? "0" : "1";
+    // this.houseService.switchLight(id);
+    let finalState = this.lightsOn[id] == "1" ? "0" : "1";
+    this.houseService.switchLight(id, finalState).subscribe(
+      data => {
+        this.lightsOn[data.Id] = data.State;
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
-  // Sin backend
   turnOnLights (): void {
-    for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = "1";
-    }
-    this.houseService.setLights("1");
+    this.houseService.setLights("1").subscribe(
+      data => {
+        if (data.Id = -1 && data.State == "ALLON") {
+          for (let i = 0; i < 5; i++) {
+            this.lightsOn[i] = "1";
+          }
+        }
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
-  // Sin backend
   turnOffLights (): void {
-    for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = "0";
-    }
-    this.houseService.setLights("0");
+    this.houseService.setLights("0").subscribe(
+      data => {
+        if (data.Id = -1 && data.State == "ALLOFF") {
+          for (let i = 0; i < 5; i++) {
+            this.lightsOn[i] = "0";
+          }
+        }
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
   takePhoto (content: any): void {

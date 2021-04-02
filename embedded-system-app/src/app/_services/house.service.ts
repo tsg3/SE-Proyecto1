@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const AUTH_API = 'http://localhost:4200/api/camera/take';
+const HOUSE_API = 'http://192.168.0.16:4200/api/';
 
 export class ResponseElements {
   Id: number;
@@ -26,12 +26,20 @@ export class ResponseImage {
 export class HouseService {
   constructor(private http: HttpClient) { }
 
-  switchLight (id: number): void {
-    // Se envia al backend
+  switchLight (id: number, state: string): Observable<any> {
+    if (state == "0") {
+      return this.http.post(HOUSE_API + 'lights/turnOff/' + id.toString(), {});
+    } else {
+      return this.http.post(HOUSE_API + 'lights/turnOn/' + id.toString(), {});
+    }
   }
 
-  setLights (state: string): void {
-    // Se envia al backend
+  setLights (state: string): Observable<any> {
+    if (state == "0") {
+      return this.http.post(HOUSE_API + 'lights/turnOffAll', {});
+    } else {
+      return this.http.post(HOUSE_API + 'lights/turnOnAll', {});
+    }
   }
 
   getLights (): Array<ResponseElements> {
@@ -54,8 +62,6 @@ export class HouseService {
   }
 
   getImage (): Observable<any> { 
-    // Se recibe del backend 'res'
-    // let res = {Data: "../../assets/light-on.svg"};
-    return this.http.get(AUTH_API);
+    return this.http.get(HOUSE_API + 'camera/take');
   }
 }
