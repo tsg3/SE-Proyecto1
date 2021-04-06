@@ -130,10 +130,10 @@ int digitalRead(char *pin)
         perror("Unable to open value file");
         exit(1);
     }
-    int *value;
+    char value[1];
 
     int result = read(fd, value, 1);
-    printf("Read result %d from %s and value %d\n", result, pin, *value);
+    printf("Read result %d from %s and value %c\n", result, pin, value[0]);
     if (result < 0)
     {
         perror("Error reading to value file");
@@ -142,7 +142,8 @@ int digitalRead(char *pin)
     close(fd);
     free(readPathValue);
     //unExportPin(pin);
-    return *value;
+    // return output;
+    return value[0] - '0';
 }
 
 int blinkFun(char *pin, int freq, int duration)

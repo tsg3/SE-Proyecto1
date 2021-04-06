@@ -49,7 +49,7 @@ func signalsInit() error {
 
 	//  Doors set as Only Read
 	for _, door := range DOORS {
-		setPin(door, true)
+		setPin(door, false)
 	}
 
 	return nil
