@@ -21,11 +21,15 @@ export class HouseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.token.getToken();
-    // Sin backend
-    let resLights = this.houseService.getLights();
-    for (let i = 0; i < 5; i++) {
-      this.lightsOn[i] = resLights[i].State;
-    }
+    this.houseService.getLights().subscribe(
+      data => {
+        for (let i = 0; i < 5; i++) {
+          this.lightsOn[i] = data[i].State;
+        }
+      }, err => {
+        console.log(err);
+      }
+    );
     this.intervalID = setInterval(() => { 
         this.updateDoors(); 
       }, 2000);
@@ -37,18 +41,19 @@ export class HouseComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Sin backend
   updateDoors (): void {
-    let resDoors = this.houseService.getDoors();
-    for (let i = 0; i < 4; i++) {
-      this.doorsOpen[i] = resDoors[i].State;
-    }
+    this.houseService.getDoors().subscribe(
+      data => {
+        for (let i = 0; i < 4; i++) {
+          this.doorsOpen[i] = data[i].State;
+        }
+      }, err => {
+        console.log(err);
+      }
+    );
   }
 
-  // Sin backend
   switchLight (id: number): void {
-    // this.lightsOn[id] = this.lightsOn[id] == "1" ? "0" : "1";
-    // this.houseService.switchLight(id);
     let finalState = this.lightsOn[id] == "1" ? "0" : "1";
     this.houseService.switchLight(id, finalState).subscribe(
       data => {

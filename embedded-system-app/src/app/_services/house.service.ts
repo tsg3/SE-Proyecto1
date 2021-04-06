@@ -42,23 +42,12 @@ export class HouseService {
     }
   }
 
-  getLights (): Array<ResponseElements> {
-    // Se recibe del backend 'res'
-    let res = [{Id: 0, State: "0"},
-              {Id: 1, State: "0"},
-              {Id: 2, State: "0"},
-              {Id: 3, State: "0"},
-              {Id: 4, State: "0"}];
-    return res;
+  getLights (): Observable<any> {
+    return this.http.get(HOUSE_API + 'lights/getAllLights');
   }
 
-  getDoors (): Array<ResponseElements> {
-    // Se recibe del backend 'res'
-    let res = [{Id: 0, State: "0"},
-      {Id: 1, State: "0"},
-      {Id: 2, State: "0"},
-      {Id: 3, State: "0"}];
-    return res;
+  getDoors (): Observable<any> {
+    return this.http.get(HOUSE_API + 'doors/getState');
   }
 
   getImage (): Observable<any> { 
