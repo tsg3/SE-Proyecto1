@@ -13,7 +13,7 @@
 
 int pinMode(char *pin, bool mode);
 int digitalWrite(char *pin, char *value);
-char *digitalRead(char *pin);
+int digitalRead(char *pin);
 int blinkFun(char *pin, int freq, int duration);
 int unExportPin(char *pin);
 char *getPhoto(long filelen);

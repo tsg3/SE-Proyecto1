@@ -216,7 +216,7 @@ func readAllDoors() []resources.StateResource {
 
 func readAllLights() []resources.StateResource {
 
-	doorsObjs := []resources.StateResource{}
+	lightsObjs := []resources.StateResource{}
 
 	for i, light := range LIGHTS {
 		state := readPin(light)
@@ -225,8 +225,8 @@ func readAllLights() []resources.StateResource {
 			State: state,
 		}
 
-		doorsObjs = append(doorsObjs, lightObj)
+		lightsObjs = append(lightsObjs, lightObj)
 	}
 
-	return doorsObjs
+	return lightsObjs
 }

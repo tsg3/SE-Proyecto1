@@ -133,7 +133,7 @@ int digitalRead(char *pin)
     int *value;
 
     int result = read(fd, value, 1);
-    printf("Read result %d from %s and value %s\n", result, pin, value);
+    printf("Read result %d from %s and value %d\n", result, pin, *value);
     if (result < 0)
     {
         perror("Error reading to value file");
@@ -141,10 +141,8 @@ int digitalRead(char *pin)
     }
     close(fd);
     free(readPathValue);
-
-    result = atoi(value);
     //unExportPin(pin);
-    return result;
+    return *value;
 }
 
 int blinkFun(char *pin, int freq, int duration)

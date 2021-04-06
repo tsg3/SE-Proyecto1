@@ -40,3 +40,7 @@ func TakePhoto() string {
 func ReadAllDoors() []resources.StateResource {
 	return readAllDoors()
 }
+
+func ReadAllLights() []resources.StateResource {
+	return readAllLights()
+}

@@ -101,3 +101,18 @@ func TurnOffAllLights(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, json)
 
 }
+
+func GetAllLights(w http.ResponseWriter, r *http.Request) {
+
+	setCORS(&w, r)
+	lightsState := signals.ReadAllLights()
+
+	json, err := json.Marshal(lightsState)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	sendResponse(w, json)
+
+}
