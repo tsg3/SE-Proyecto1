@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"serverHome/controllers"
 	"serverHome/routes"
+	signals "serverHome/src"
 	"strings"
 )
 
@@ -39,17 +40,17 @@ func main() {
 	controllers.InitAdminUser()
 	// Initialize the routes and the server
 	mux := routes.Server_init()
-	// signals.SignalsInit()
-	// signals.SignalsOff()
+	signals.SignalsInit()
 
 	fmt.Println("Starting server on: " + IP + ":" + PORT)
 
 	// Starting the server in the IP and PORT assigned before
 	err_s := http.ListenAndServe(IP+":"+PORT, mux)
 
+	signals.SignalsOff()
+
 	if err_s != nil {
 		fmt.Println("There ir a error %v", err_s)
 		panic(err_s)
-
 	}
 }

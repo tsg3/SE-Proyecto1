@@ -1,7 +1,7 @@
 #add include to directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-# set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
-set(CMAKE_C_COMPILER gcc)
+set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
+# set(CMAKE_C_COMPILER gcc)
 set(LIB_C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_C_FILES})
 

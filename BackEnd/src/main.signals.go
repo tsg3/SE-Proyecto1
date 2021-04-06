@@ -17,15 +17,15 @@ func TurnOnPin(pin int) error {
 }
 
 func TurnOffPin(pin int) error {
-	return turnOffPin(pin)
+	return turnOffPin(pin, true)
 }
 
-func TurnOnAllLights() ([]resources.StateResource, error) {
-	return turnOffAllLights()
+func TurnOnAllLights() error {
+	return turnOnAllLights()
 
 }
 
-func TurnOffAllLights() ([]resources.StateResource, error) {
+func TurnOffAllLights() error {
 	return turnOffAllLights()
 }
 

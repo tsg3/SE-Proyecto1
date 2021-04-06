@@ -18,10 +18,11 @@ import (
 	"fmt"
 	"os"
 	"serverHome/resources"
+	"strconv"
 	"unsafe"
 )
 
-var DOORS = [4]string{"5", "6", "16", "26"}
+var DOORS = [4]string{"26", "9", "16", "11"}
 var LIGHTS = [5]string{"17", "18", "22", "23", "27"}
 
 func setPin(pin string, mode bool) {
@@ -48,7 +49,7 @@ func signalsInit() error {
 
 	//  Doors set as Only Read
 	for _, door := range DOORS {
-		setPin(door, false)
+		setPin(door, true)
 	}
 
 	return nil
@@ -91,14 +92,22 @@ func turnOnPin(pin int) error {
 	return nil
 }
 
-func turnOffPin(pin int) error {
+func turnOffPin(pin int, mode bool) error {
 	err := checkLight(pin)
 
 	if err != nil {
 		return err
 	}
-	fmt.Println("Apangando" + LIGHTS[pin])
-	pinNum := C.CString(LIGHTS[pin])
+
+	var pinNum *C.char
+	if mode {
+		fmt.Println("Apangando" + LIGHTS[pin])
+		pinNum = C.CString(LIGHTS[pin])
+	} else {
+		fmt.Println("Apangando" + DOORS[pin])
+		pinNum = C.CString(DOORS[pin])
+	}
+
 	ceroV := C.CString("0")
 	C.digitalWrite(pinNum, ceroV)
 	C.free(unsafe.Pointer(ceroV))
@@ -107,35 +116,33 @@ func turnOffPin(pin int) error {
 	return nil
 }
 
-func turnOnAllLights() ([]resources.StateResource, error) {
+func turnOnAllLights() error {
 	// Lights set as Write
 	for i, _ := range LIGHTS {
 		err := turnOnPin(i)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 
-	return readAllLights(), nil
+	return nil
 
 }
 
-func turnOffAllLights() ([]resources.StateResource, error) {
+func turnOffAllLights() error {
 	for i, _ := range LIGHTS {
 
-		err := turnOffPin(i)
+		err := turnOffPin(i, true)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 
-	return readAllLights(), nil
+	return nil
 }
 
 func takePhoto() string {
-	// var ptr *C.char
 	C.takePhoto()
-	// ptr = C.getPhoto(ar)
 
 	imgFile, err := os.Open("photo.jpeg") // a QR code image
 
@@ -154,17 +161,7 @@ func takePhoto() string {
 	// read file content into buffer
 	fReader := bufio.NewReader(imgFile)
 	fReader.Read(buf)
-
-	// if you create a new image instead of loading from file, encode the image to buffer instead with png.Encode()
-
-	// png.Encode(&buf, image)
-
-	// convert the buffer bytes to base64 string - use buf.Bytes() for new image
 	encodedStr := base64.StdEncoding.EncodeToString(buf)
-
-	// data := C.GoString(ptr)
-
-	// encodedStr := base64.StdEncoding.EncodeToString([]byte(data))
 
 	return encodedStr
 
@@ -173,14 +170,32 @@ func takePhoto() string {
 func readPin(pin string) string {
 
 	pinNum := C.CString(pin)
-	state := C.digitalRead(pinNum)
-	C.free(unsafe.Pointer(pinNum))
 
-	result := C.GoString(state)
+	state := C.digitalRead(pinNum)
+
+	result := strconv.Itoa(int(state))
+
+	C.free(unsafe.Pointer(pinNum))
 
 	return result
 
 }
+
+// func readPinDoor(pin string) string {
+
+// 	setPin(pin, false)
+// 	pinNum := C.CString(pin)
+
+// 	state := C.digitalRead(pinNum)
+
+// 	result := C.GoString(state)
+
+// 	C.free(unsafe.Pointer(pinNum))
+// 	unSetPin(pin)
+
+// 	return result
+
+// }
 
 func readAllDoors() []resources.StateResource {
 
