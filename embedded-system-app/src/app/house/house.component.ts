@@ -30,12 +30,20 @@ export class HouseComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     );
-    this.intervalID = setInterval(() => { 
-        this.updateDoors(); 
-      }, 2000);
+    this.startInterval();
   }
 
   ngOnDestroy(): void {
+    this.endInterval();
+  }
+
+  startInterval(): void {
+    this.intervalID = setInterval(() => { 
+      this.updateDoors(); 
+    }, 2000);
+  }
+
+  endInterval(): void {
     if (this.intervalID) {
       clearInterval(this.intervalID);
     }
@@ -54,6 +62,7 @@ export class HouseComponent implements OnInit, OnDestroy {
   }
 
   switchLight (id: number): void {
+    this.endInterval();
     let finalState = this.lightsOn[id] == "1" ? "0" : "1";
     this.houseService.switchLight(id, finalState).subscribe(
       data => {
@@ -62,9 +71,11 @@ export class HouseComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     );
+    this.startInterval();
   }
 
   turnOnLights (): void {
+    this.endInterval();
     this.houseService.setLights("1").subscribe(
       data => {
         if (data.Id = -1 && data.State == "ALLON") {
@@ -76,9 +87,11 @@ export class HouseComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     );
+    this.startInterval();
   }
 
   turnOffLights (): void {
+    this.endInterval();
     this.houseService.setLights("0").subscribe(
       data => {
         if (data.Id = -1 && data.State == "ALLOFF") {
@@ -90,10 +103,13 @@ export class HouseComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     );
+    this.startInterval();
   }
 
   takePhoto (content: any): void {
+    this.endInterval();
     this.getPhoto(content);
+    this.startInterval();
   }
 
   private getPhoto(content: any): void {
