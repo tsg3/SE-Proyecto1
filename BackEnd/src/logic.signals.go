@@ -14,8 +14,10 @@ import "C"
 import (
 	"bufio"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"serverHome/resources"
 	"strconv"
@@ -52,7 +54,9 @@ func signalsInit() error {
 		setPin(door, false)
 	}
 
-	return nil
+	err := setPinValues()
+
+	return err
 }
 
 func signalsOff() error {
@@ -77,49 +81,33 @@ func checkLight(pin int) error {
 	return nil
 }
 
-func turnOnPin(pin int) error {
-	err := checkLight(pin)
-	if err != nil {
-		return err
-	}
-	fmt.Println("Prendiendo" + LIGHTS[pin])
-	pinNum := C.CString(LIGHTS[pin])
-	oneV := C.CString("1")
-	C.digitalWrite(pinNum, oneV)
-	C.free(unsafe.Pointer(oneV))
-	C.free(unsafe.Pointer(pinNum))
-
-	return nil
-}
-
-func turnOffPin(pin int, mode bool) error {
+func switchPinValue(pin int, mode bool) error {
 	err := checkLight(pin)
 
 	if err != nil {
 		return err
 	}
 
-	var pinNum *C.char
+	var value *C.char
 	if mode {
-		fmt.Println("Apangando" + LIGHTS[pin])
-		pinNum = C.CString(LIGHTS[pin])
+		fmt.Println("Encendiendo" + LIGHTS[pin])
+		value = C.CString("1")
 	} else {
-		fmt.Println("Apangando" + DOORS[pin])
-		pinNum = C.CString(DOORS[pin])
+		fmt.Println("Apangando" + LIGHTS[pin])
+		value = C.CString("0")
 	}
 
-	ceroV := C.CString("0")
-	C.digitalWrite(pinNum, ceroV)
-	C.free(unsafe.Pointer(ceroV))
+	pinNum := C.CString(LIGHTS[pin])
+	C.digitalWrite(pinNum, value)
+	C.free(unsafe.Pointer(value))
 	C.free(unsafe.Pointer(pinNum))
 
 	return nil
 }
 
-func turnOnAllLights() error {
-	// Lights set as Write
+func switchAllPinValues(mode bool) error {
 	for i, _ := range LIGHTS {
-		err := turnOnPin(i)
+		err := switchPinValue(i, mode)
 		if err != nil {
 			return err
 		}
@@ -127,18 +115,6 @@ func turnOnAllLights() error {
 
 	return nil
 
-}
-
-func turnOffAllLights() error {
-	for i, _ := range LIGHTS {
-
-		err := turnOffPin(i, true)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func takePhoto() string {
@@ -181,22 +157,6 @@ func readPin(pin string) string {
 
 }
 
-// func readPinDoor(pin string) string {
-
-// 	setPin(pin, false)
-// 	pinNum := C.CString(pin)
-
-// 	state := C.digitalRead(pinNum)
-
-// 	result := C.GoString(state)
-
-// 	C.free(unsafe.Pointer(pinNum))
-// 	unSetPin(pin)
-
-// 	return result
-
-// }
-
 func readAllDoors() []resources.StateResource {
 
 	doorsObjs := []resources.StateResource{}
@@ -229,4 +189,80 @@ func readAllLights() []resources.StateResource {
 	}
 
 	return lightsObjs
+}
+
+func saveLightsState(states []resources.StateResource) error {
+
+	file, err := json.MarshalIndent(states, "", " ")
+
+	if err != nil {
+		fmt.Printf("There is an error saving a file: %s\n", err)
+		return err
+	}
+	fmt.Println(file)
+
+	err = ioutil.WriteFile("lightsStates.json", file, 0644)
+
+	if err != nil {
+		fmt.Printf("There is an error saving a file: %s\n", err)
+	}
+
+	return err
+}
+
+func readStatesFromFile() ([]resources.StateResource, error) {
+	file, err := ioutil.ReadFile("lightsStates.json")
+
+	var states []resources.StateResource
+	if err != nil {
+		fmt.Printf("There is an error saving a file: %s\n", err)
+		return states, err
+	}
+
+	err = json.Unmarshal([]byte(file), &states)
+
+	if err != nil {
+		fmt.Printf("There is an error saving a file: %s\n", err)
+		return states, err
+	}
+
+	return states, nil
+}
+
+// This function sets the value of each pin, when the system starts
+func setPinValues() error {
+	if _, err := os.Stat("lightsStates.json"); os.IsNotExist(err) {
+		fmt.Println("File lightsStates.json doesn't exists")
+		return err
+	}
+
+	states, err := readStatesFromFile()
+
+	if err != nil {
+		return err
+	}
+	var mode bool
+	for _, state := range states {
+		if state.State == "1" {
+			mode = true
+		} else {
+			mode = false
+		}
+		err = switchPinValue(state.Id, mode)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func updateLightsState(err error) error {
+	if err != nil {
+		return err
+	}
+
+	states := readAllLights()
+	err_s := saveLightsState(states)
+
+	return err_s
 }
