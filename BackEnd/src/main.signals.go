@@ -13,20 +13,25 @@ func SignalsOff() error {
 }
 
 func TurnOnPin(pin int) error {
-	return turnOnPin(pin)
+	err := switchPinValue(pin, true)
+
+	return updateLightsState(err)
 }
 
 func TurnOffPin(pin int) error {
-	return turnOffPin(pin, true)
+	err := switchPinValue(pin, false)
+	return updateLightsState(err)
 }
 
 func TurnOnAllLights() error {
-	return turnOnAllLights()
+	err := switchAllPinValues(true)
+	return updateLightsState(err)
 
 }
 
 func TurnOffAllLights() error {
-	return turnOffAllLights()
+	err := switchAllPinValues(false)
+	return updateLightsState(err)
 }
 
 func TakePhoto() string {
