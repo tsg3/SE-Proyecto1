@@ -1,8 +1,8 @@
 package signals
 
 /*
-#cgo CFLAGS: -I./include
-#cgo LDFLAGS: -L./lib -lpinControl
+#cgo CFLAGS: -I../src/include
+#cgo LDFLAGS: -L../src/lib -lpinControl
 #include <pinControl.h>
 #include <stdio.h>
 #include <stdlib.h>

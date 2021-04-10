@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"serverHome/resources"
-	signals "serverHome/src"
+	"serverHome/signals"
 	"strconv"
 
 	"goji.io/pat"

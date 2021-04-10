@@ -2,35 +2,18 @@ package main
 
 import (
 	"fmt"
-	"net"
 	"net/http"
 	"serverHome/controllers"
+	"serverHome/network"
 	"serverHome/routes"
-	signals "serverHome/src"
-	"strings"
+	"serverHome/signals"
 )
 
 const PORT = "5000"
 
-func get_ip() (string, error) {
-	addrs, err := net.InterfaceAddrs()
-	if err != nil {
-		return "", err
-	}
-
-	for _, addr := range addrs {
-		s := strings.Split(addr.String(), "/")
-		if s[1] == "24" {
-			return s[0], nil
-		}
-	}
-
-	return "", nil
-}
-
 func main() {
 	// Get the IP
-	IP, err := get_ip()
+	IP, err := network.GetPersonalIp()
 
 	if IP == "" || err != nil {
 		panic(err)
@@ -50,7 +33,7 @@ func main() {
 	signals.SignalsOff()
 
 	if err_s != nil {
-		fmt.Println("There ir a error %v", err_s)
+		fmt.Printf("There is a error %s\n", err_s)
 		panic(err_s)
 	}
 }

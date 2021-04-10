@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
-	signals "serverHome/src"
+	"serverHome/signals"
 )
 
 func GetDoorsState(w http.ResponseWriter, r *http.Request) {

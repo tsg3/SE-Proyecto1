@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"serverHome/resources"
-	signals "serverHome/src"
+	"serverHome/signals"
 )
 
 func TakePhoto(w http.ResponseWriter, r *http.Request) {
