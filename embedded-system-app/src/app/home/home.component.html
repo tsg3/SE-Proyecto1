@@ -1,0 +1,13 @@
+<div class="container" *ngIf="!isLoggedIn, else loggedIn">
+  <header class="no-logged">
+    <h3> 
+      <strong> Please log in! </strong> 
+    </h3>
+  </header>
+</div>
+
+<ng-template #loggedIn>
+  <h3> 
+    <strong> Welcome to your house controller! </strong> 
+  </h3>
+</ng-template>

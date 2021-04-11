@@ -1,0 +1,73 @@
+<div class="col-md-12">
+    <div class="card card-container center">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+        width="192" 
+        height="192"
+      />
+      <div class="alert alert-success" *ngIf="isLoggedIn">
+        Logged in!.
+      </div>
+      <form
+        *ngIf="!isLoggedIn"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && isLoginFailed"
+          >
+            Login failed: {{ errorMessage }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="Username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="Username"
+            [(ngModel)]="form.Username"
+            required
+            #Username="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && Username.invalid"
+          >
+            Username is required!
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="Password">Password</label>
+          <input
+            type="Password"
+            class="form-control"
+            name="Password"
+            [(ngModel)]="form.Password"
+            required
+            #Password="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && Password.invalid"
+          >
+            Password is required!
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
