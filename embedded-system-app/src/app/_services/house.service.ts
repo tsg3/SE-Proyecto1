@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const HOUSE_API = 'http://192.168.0.16:4200/api/';
-
 export class ResponseElements {
   Id: number;
   State: string;
@@ -28,29 +26,29 @@ export class HouseService {
 
   switchLight (id: number, state: string): Observable<any> {
     if (state == "0") {
-      return this.http.post(HOUSE_API + 'lights/turnOff/' + id.toString(), {});
+      return this.http.post('/api/lights/turnOff/' + id.toString(), {});
     } else {
-      return this.http.post(HOUSE_API + 'lights/turnOn/' + id.toString(), {});
+      return this.http.post('/api/lights/turnOn/' + id.toString(), {});
     }
   }
 
   setLights (state: string): Observable<any> {
     if (state == "0") {
-      return this.http.post(HOUSE_API + 'lights/turnOffAll', {});
+      return this.http.post('/api/lights/turnOffAll', {});
     } else {
-      return this.http.post(HOUSE_API + 'lights/turnOnAll', {});
+      return this.http.post('/api/lights/turnOnAll', {});
     }
   }
 
   getLights (): Observable<any> {
-    return this.http.get(HOUSE_API + 'lights/getAllLights');
+    return this.http.get('/api/lights/getAllLights');
   }
 
   getDoors (): Observable<any> {
-    return this.http.get(HOUSE_API + 'doors/getState');
+    return this.http.get('/api/doors/getState');
   }
 
   getImage (): Observable<any> { 
-    return this.http.get(HOUSE_API + 'camera/take');
+    return this.http.get('/api/camera/take');
   }
 }

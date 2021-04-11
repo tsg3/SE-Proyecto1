@@ -19,7 +19,6 @@ export class TokenStorageService {
   }
 
   public getToken(): string {
-    // return sessionStorage.getItem(TOKEN_KEY);
     let token = localStorage.getItem(TOKEN_KEY);
     if (token == null)
       token = '';
