@@ -2,53 +2,37 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export class ResponseElements {
-  Id: number;
-  State: string;
-  constructor(id: number, state: string){
-    this.Id = id;
-    this.State = state;
-  }
-}
-
-export class ResponseImage {
-  Data: string;
-  constructor(data: string){
-    this.Data = data;
-  }
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class HouseService {
   constructor(private http: HttpClient) { }
 
-  switchLight (id: number, state: string): Observable<any> {
+  async switchLight (id: number, state: string): Promise<any> {
     if (state == "0") {
-      return this.http.post('/api/lights/turnOff/' + id.toString(), {});
+      return await this.http.post('/api/lights/turnOff/' + id.toString(), {}).toPromise();
     } else {
-      return this.http.post('/api/lights/turnOn/' + id.toString(), {});
+      return await this.http.post('/api/lights/turnOn/' + id.toString(), {}).toPromise();
     }
   }
 
-  setLights (state: string): Observable<any> {
+  async setLights (state: string): Promise<any> {
     if (state == "0") {
-      return this.http.post('/api/lights/turnOffAll', {});
+      return await this.http.post('/api/lights/turnOffAll', {}).toPromise();
     } else {
-      return this.http.post('/api/lights/turnOnAll', {});
+      return await this.http.post('/api/lights/turnOnAll', {}).toPromise();
     }
   }
 
-  getLights (): Observable<any> {
-    return this.http.get('/api/lights/getAllLights');
+  async getLights (): Promise<any> {
+    return await this.http.get('/api/lights/getAllLights').toPromise();
   }
 
-  getDoors (): Observable<any> {
-    return this.http.get('/api/doors/getState');
+  async getDoors (): Promise<any> {
+    return await this.http.get('/api/doors/getState').toPromise();
   }
 
-  getImage (): Observable<any> { 
-    return this.http.get('/api/camera/take');
+  async getImage (): Promise<any> { 
+    return await this.http.get('/api/camera/take').toPromise();
   }
 }

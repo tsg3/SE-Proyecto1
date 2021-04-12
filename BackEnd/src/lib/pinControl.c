@@ -1,7 +1,5 @@
 #include "pinControl.h"
 
-char *readPathValue;
-
 long takePhoto()
 {
     int status = system("fswebcam /dev/video0 photo.jpeg");
@@ -114,17 +112,15 @@ int digitalWrite(char *pin, char *value)
         exit(1);
     }
     close(fd);
-    memset(pathValue, 0, 28);
     return 0;
 }
 
 int digitalRead(char *pin)
 {
-    readPathValue = (char *)malloc(28 * sizeof(char));
-    memset(readPathValue, 0, 28);
-    sprintf(readPathValue, "/sys/class/gpio/gpio%s/value", pin);
-    printf("%s \n", readPathValue);
-    int fd = open(readPathValue, O_RDONLY);
+    char pathValue[28];
+    sprintf(pathValue, "/sys/class/gpio/gpio%s/value", pin);
+    printf("%s \n", pathValue);
+    int fd = open(pathValue, O_RDONLY);
     if (fd == -1)
     {
         perror("Unable to open value file");
@@ -140,7 +136,6 @@ int digitalRead(char *pin)
         exit(1);
     }
     close(fd);
-    free(readPathValue);
     //unExportPin(pin);
     // return output;
     return value[0] - '0';

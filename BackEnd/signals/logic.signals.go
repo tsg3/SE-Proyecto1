@@ -199,7 +199,6 @@ func saveLightsState(states []resources.StateResource) error {
 		fmt.Printf("There is an error saving a file: %s\n", err)
 		return err
 	}
-	fmt.Println(file)
 
 	err = ioutil.WriteFile("lightsStates.json", file, 0644)
 

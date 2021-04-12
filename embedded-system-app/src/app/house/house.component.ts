@@ -19,9 +19,9 @@ export class HouseComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private houseService: HouseService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.isLoggedIn = !!this.token.getToken();
-    this.houseService.getLights().subscribe(
+    await this.houseService.getLights().then(
       data => {
         for (let i = 0; i < 5; i++) {
           this.lightsOn[i] = data[i].State;
@@ -30,6 +30,7 @@ export class HouseComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     );
+    this.endInterval();
     this.startInterval();
   }
 
@@ -49,8 +50,8 @@ export class HouseComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateDoors (): void {
-    this.houseService.getDoors().subscribe(
+  async updateDoors () {
+    await this.houseService.getDoors().then(
       data => {
         for (let i = 0; i < 4; i++) {
           this.doorsOpen[i] = data[i].State;
@@ -61,10 +62,10 @@ export class HouseComponent implements OnInit, OnDestroy {
     );
   }
 
-  switchLight (id: number): void {
+  async switchLight (id: number) {
     this.endInterval();
     let finalState = this.lightsOn[id] == "1" ? "0" : "1";
-    this.houseService.switchLight(id, finalState).subscribe(
+    await this.houseService.switchLight(id, finalState).then(
       data => {
         this.lightsOn[data.Id] = data.State;
       }, err => {
@@ -74,9 +75,9 @@ export class HouseComponent implements OnInit, OnDestroy {
     this.startInterval();
   }
 
-  turnOnLights (): void {
+  async turnOnLights () {
     this.endInterval();
-    this.houseService.setLights("1").subscribe(
+    await this.houseService.setLights("1").then(
       data => {
         if (data.Id = -1 && data.State == "ALLON") {
           for (let i = 0; i < 5; i++) {
@@ -90,9 +91,9 @@ export class HouseComponent implements OnInit, OnDestroy {
     this.startInterval();
   }
 
-  turnOffLights (): void {
+  async turnOffLights () {
     this.endInterval();
-    this.houseService.setLights("0").subscribe(
+    await this.houseService.setLights("0").then(
       data => {
         if (data.Id = -1 && data.State == "ALLOFF") {
           for (let i = 0; i < 5; i++) {
@@ -112,8 +113,8 @@ export class HouseComponent implements OnInit, OnDestroy {
     this.startInterval();
   }
 
-  private getPhoto(content: any): void {
-    this.houseService.getImage().subscribe(
+  private async getPhoto(content: any) {
+    await this.houseService.getImage().then(
       data => {
         this.imgBase64 = data.Data;
         this.modalService.open(content, {windowClass: 'dark-modal', size: "md"});
